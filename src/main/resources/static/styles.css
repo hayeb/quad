@@ -1,0 +1,29 @@
+.form-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+td {
+    select {
+        width: 100%;
+    }
+}
+
+#error {
+    color: red;
+}
+
+.incorrect {
+    color: orange;
+}
+
+.correct {
+    color: green;
+}
