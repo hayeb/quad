@@ -1,3 +1,6 @@
 spring:
   application:
     name: open-trivia
+
+opentrivia.baseUrl: "https://opentdb.com"
+answersLocation: "answers.json"

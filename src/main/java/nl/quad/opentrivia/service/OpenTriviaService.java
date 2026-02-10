@@ -7,7 +7,7 @@ import nl.quad.opentrivia.client.opentrivia.model.QuestionType;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
 import nl.quad.opentrivia.rest.dto.Check;
 import nl.quad.opentrivia.rest.dto.CheckAnswer;
-import nl.quad.opentrivia.rest.dto.Question;
+import nl.quad.opentrivia.rest.dto.QuestionDto;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class OpenTriviaService {
     private final OpenTriviaClientService openTriviaClientService;
     private final AnswerStore answerStore;
 
-    public List<Question> findQuestions(Integer amount, Integer category, Difficulty difficulty, QuestionType questionType) {
+    public List<QuestionDto> findQuestions(Integer amount, Integer category, Difficulty difficulty, QuestionType questionType) {
         QuestionsResponse response = openTriviaClientService.getQuestions(amount, category, difficulty, questionType);
 
         if (response.responseCode() != 0) {
@@ -41,14 +41,14 @@ public class OpenTriviaService {
                 answers.addAll(q.incorrect().stream().map(StringEscapeUtils::unescapeHtml4).toList());
 
                 Collections.shuffle(answers);
-                return new Question(question, answers);
+                return new QuestionDto(question, answers);
             })
             .toList();
     }
 
     public List<Check> check(List<CheckAnswer> answers) {
         return answers.stream()
-            .map(a -> new Check(a.question(), a.answer(), Objects.equals(this.answerStore.getAnswer(a.question()), a.answer())))
+            .map(a -> new Check(a.question(), Objects.equals(this.answerStore.getAnswer(a.question()), a.answer())))
             .toList();
     }
 }

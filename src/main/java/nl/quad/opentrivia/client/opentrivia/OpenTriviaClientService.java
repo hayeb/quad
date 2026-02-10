@@ -4,6 +4,7 @@ import nl.quad.opentrivia.client.opentrivia.exception.OpenTriviaException;
 import nl.quad.opentrivia.client.opentrivia.model.Difficulty;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionType;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
@@ -22,8 +23,8 @@ public class OpenTriviaClientService {
 
     private final RestClient restClient;
 
-    public OpenTriviaClientService(RestClient.Builder builder) {
-        this.restClient = builder.baseUrl("https://opentdb.com")
+    public OpenTriviaClientService(RestClient.Builder builder, @Value("${opentrivia.baseUrl}") String baseUrl) {
+        this.restClient = builder.baseUrl(baseUrl)
             .configureMessageConverters(cb -> cb.withJsonConverter(
                 new JacksonJsonHttpMessageConverter(JsonMapper.builder()
                     .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
