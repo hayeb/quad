@@ -5,8 +5,8 @@ import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
 import nl.quad.opentrivia.client.opentrivia.model.Difficulty;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionType;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
-import nl.quad.opentrivia.rest.dto.Check;
-import nl.quad.opentrivia.rest.dto.CheckAnswer;
+import nl.quad.opentrivia.rest.dto.CheckResponseDto;
+import nl.quad.opentrivia.rest.dto.CheckRequestDto;
 import nl.quad.opentrivia.rest.dto.QuestionDto;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Service;
@@ -46,9 +46,9 @@ public class OpenTriviaService {
             .toList();
     }
 
-    public List<Check> check(List<CheckAnswer> answers) {
+    public List<CheckResponseDto> check(List<CheckRequestDto> answers) {
         return answers.stream()
-            .map(a -> new Check(a.question(), Objects.equals(this.answerStore.getAnswer(a.question()), a.answer())))
+            .map(a -> new CheckResponseDto(a.question(), Objects.equals(this.answerStore.getAnswer(a.question()), a.answer())))
             .toList();
     }
 }

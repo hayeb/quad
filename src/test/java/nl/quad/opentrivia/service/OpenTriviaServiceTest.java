@@ -5,8 +5,8 @@ import nl.quad.opentrivia.client.opentrivia.model.Difficulty;
 import nl.quad.opentrivia.client.opentrivia.model.Question;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionType;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
-import nl.quad.opentrivia.rest.dto.Check;
-import nl.quad.opentrivia.rest.dto.CheckAnswer;
+import nl.quad.opentrivia.rest.dto.CheckResponseDto;
+import nl.quad.opentrivia.rest.dto.CheckRequestDto;
 import nl.quad.opentrivia.rest.dto.QuestionDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,21 +48,21 @@ class OpenTriviaServiceTest {
     @Test
     void testCheckCorrect() {
         Mockito.when(answerStore.getAnswer("Who won the 2016 Formula 1 World Driver's Championship?")).thenReturn("Nico Rosberg");
-        assertThat(openTriviaService.check(List.of(new CheckAnswer("Who won the 2016 Formula 1 World Driver's Championship?", "Nico Rosberg"))))
-            .containsExactlyInAnyOrderElementsOf(List.of(new Check("Who won the 2016 Formula 1 World Driver's Championship?", true)));
+        assertThat(openTriviaService.check(List.of(new CheckRequestDto("Who won the 2016 Formula 1 World Driver's Championship?", "Nico Rosberg"))))
+            .containsExactlyInAnyOrderElementsOf(List.of(new CheckResponseDto("Who won the 2016 Formula 1 World Driver's Championship?", true)));
     }
 
     @Test
     void testCheckIncorrect() {
         Mockito.when(answerStore.getAnswer("Who won the 2016 Formula 1 World Driver's Championship?")).thenReturn("Nico Rosberg");
-        assertThat(openTriviaService.check(List.of(new CheckAnswer("Who won the 2016 Formula 1 World Driver's Championship?", "Lewis Hamilton"))))
-            .containsExactlyInAnyOrderElementsOf(List.of(new Check("Who won the 2016 Formula 1 World Driver's Championship?", false)));
+        assertThat(openTriviaService.check(List.of(new CheckRequestDto("Who won the 2016 Formula 1 World Driver's Championship?", "Lewis Hamilton"))))
+            .containsExactlyInAnyOrderElementsOf(List.of(new CheckResponseDto("Who won the 2016 Formula 1 World Driver's Championship?", false)));
     }
 
     @Test
     void testCheckUnknown() {
-        assertThat(openTriviaService.check(List.of(new CheckAnswer("Unknown question", "Some answer"))))
-            .containsExactlyInAnyOrderElementsOf(List.of(new Check("Unknown question", false)));
+        assertThat(openTriviaService.check(List.of(new CheckRequestDto("Unknown question", "Some answer"))))
+            .containsExactlyInAnyOrderElementsOf(List.of(new CheckResponseDto("Unknown question", false)));
     }
 
 

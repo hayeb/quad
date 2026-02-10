@@ -5,8 +5,8 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import nl.quad.opentrivia.client.opentrivia.model.Difficulty;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionType;
-import nl.quad.opentrivia.rest.dto.Check;
-import nl.quad.opentrivia.rest.dto.CheckAnswer;
+import nl.quad.opentrivia.rest.dto.CheckResponseDto;
+import nl.quad.opentrivia.rest.dto.CheckRequestDto;
 import nl.quad.opentrivia.rest.dto.QuestionDto;
 import nl.quad.opentrivia.service.OpenTriviaService;
 import org.springframework.validation.annotation.Validated;
@@ -38,9 +38,9 @@ public class OpenTriviaController {
     }
 
     @PostMapping("/checkanswers")
-    public List<Check> checkAnswers(
+    public List<CheckResponseDto> checkAnswers(
         @RequestBody
-        List<CheckAnswer> answers) {
+        List<CheckRequestDto> answers) {
         return this.openTriviaService.check(answers);
     }
 }
