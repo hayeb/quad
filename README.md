@@ -3,7 +3,7 @@
 Very simple app that allows answering questions from [OpenTrivia](https://opentdb.com/) without any cheating by checking the
 answers.
 
-## Building
+## Building and running backend
 
 1. Ensure JDK 25 and Maven are installed and available on PATH
 2. Run Maven build:
@@ -18,8 +18,27 @@ answers.
    You can override the OpenTrivia endpoint or the file used for answers storage: 
    ```shell
    mvn spring-boot:run -Dspring-boot.run.arguments='--answersLocation=answers-new.json'
-   ``` 
-4. In browser, navigate to http://localhost:8080/
+   ```
+
+## Building and running frontend 
+1. Install [NVM](https://github.com/nvm-sh/nvm)
+2. Install node 24:
+   ```shell
+   nvm install 24
+   ````
+3. Install the Angular CLI
+   ```shell
+   npm install -g @angular/cli
+   ```
+4. Go into frontend and install dependencies
+   ```shell
+   cd frontend
+   npm i
+   ```
+5. Start the Angular dev server
+   ```shell
+   ng serve
+   ```
 
 ## Testing
 1. Run the tests using Maven:

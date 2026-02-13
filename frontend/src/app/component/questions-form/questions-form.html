@@ -1,0 +1,57 @@
+<mat-form-field>
+    <mat-label>Amount</mat-label>
+    <input type="number" matInput [formControl]="formGroup.controls.amount">
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Category</mat-label>
+    <mat-select [formControl]="formGroup.controls.category">
+        <mat-option value="">Any category</mat-option>
+        <mat-option value="9">General Knowledge</mat-option>
+        <mat-option value="10"> Entertainment: Books</mat-option>
+        <mat-option value="11"> Entertainment: Film</mat-option>
+        <mat-option value="12"> Entertainment: Music</mat-option>
+        <mat-option value="13"> Entertainment: Musicals & Theatres</mat-option>
+        <mat-option value="14"> Entertainment: Television</mat-option>
+        <mat-option value="15"> Entertainment: Video Games</mat-option>
+        <mat-option value="16"> Entertainment: Board Games</mat-option>
+        <mat-option value="17"> Science & Nature</mat-option>
+        <mat-option value="18"> Science: Computers</mat-option>
+        <mat-option value="19"> Science: Mathematics</mat-option>
+        <mat-option value="20"> Mythology</mat-option>
+        <mat-option value="21"> Sports</mat-option>
+        <mat-option value="22"> Geography</mat-option>
+        <mat-option value="23"> History</mat-option>
+        <mat-option value="24"> Politics</mat-option>
+        <mat-option value="25"> Art</mat-option>
+        <mat-option value="26"> Celebrities</mat-option>
+        <mat-option value="27"> Animals</mat-option>
+        <mat-option value="28"> Vehicles</mat-option>
+        <mat-option value="29"> Entertainment: Comics</mat-option>
+        <mat-option value="30"> Science: Gadgets</mat-option>
+        <mat-option value="31"> Entertainment: Japanese Anime & Manga</mat-option>
+        <mat-option value="32"> Entertainment: Cartoon & Animations</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Difficulty</mat-label>
+    <mat-select [formControl]="formGroup.controls.difficulty">
+        <mat-option [value]="">All difficulties</mat-option>
+        <mat-option [value]="Difficulty.EASY">Easy</mat-option>
+        <mat-option [value]="Difficulty.MEDIUM">Medium</mat-option>
+        <mat-option [value]="Difficulty.HARD">Hard</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Difficulty</mat-label>
+    <mat-select [formControl]="formGroup.controls.questionType">
+        <mat-option [value]="">All types</mat-option>
+        <mat-option [value]="QuestionType.MULTIPLE_CHOICE">Multiple Choice</mat-option>
+        <mat-option [value]="QuestionType.BOOLEAN">Boolean</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<button matButton (click)="onSearchQuestions()">Get questions</button>
+<button matButton (click)="checkAnswers.emit()">Check answers</button>

@@ -1,0 +1,9 @@
+<div class="content">
+    <app-questions-form (searchQuestions)="searchQuestions($event)" (checkAnswers)="checkAnswers()" />
+
+    @if (questions().length === 0) {
+        <span>Please use the form to search for questions</span>
+    } @else {
+        <app-questions-table [questions]="questions()"  [(answers)]="answers" [checks]="checks()" />
+    }
+</div>

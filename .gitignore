@@ -33,3 +33,7 @@ build/
 .vscode/
 
 answers.json
+
+### Frontend
+frontend/node_modules
+frontend/.angular

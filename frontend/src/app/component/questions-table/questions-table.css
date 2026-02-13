@@ -1,0 +1,7 @@
+:host {
+    width: 50%;
+}
+
+.mat-column-question {
+    max-width: 300px;
+}
