@@ -1,5 +1,6 @@
-package nl.quad.opentrivia.service;
+package nl.quad.opentrivia.functionality.answerstore.service;
 
+import nl.quad.opentrivia.exception.OpenTriviaException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
@@ -18,7 +19,7 @@ public class AnswerStore {
 
     private final ObjectMapper objectMapper;
 
-    private final File answersFile ;
+    private final File answersFile;
 
     public AnswerStore(ObjectMapper objectMapper, @Value("${answersLocation}") String answersLocation) {
         this.objectMapper = objectMapper;
@@ -36,7 +37,8 @@ public class AnswerStore {
     }
 
     private Map<String, String> getStoredAnswers() {
-        return objectMapper.readValue(answersFile, new TypeReference<Map<String, String>>() {});
+        return objectMapper.readValue(answersFile, new TypeReference<Map<String, String>>() {
+        });
     }
 
     private void storeAnswers(Map<String, String> answers) {
@@ -45,9 +47,9 @@ public class AnswerStore {
             objectMapper.writeValue(f, answers);
             lock.release();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Unable to store answers: %s".formatted(e.getMessage()));
+            throw new OpenTriviaException("Unable to store answers: %s".formatted(e.getMessage()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new OpenTriviaException(e.getMessage());
         }
     }
 
@@ -56,7 +58,7 @@ public class AnswerStore {
             answersFile.createNewFile();
             storeAnswers(Map.of());
         } catch (IOException e) {
-            throw new RuntimeException("Unable to create file: %s".formatted(e.getMessage()));
+            throw new OpenTriviaException("Unable to create file: %s".formatted(e.getMessage()));
         }
 
     }

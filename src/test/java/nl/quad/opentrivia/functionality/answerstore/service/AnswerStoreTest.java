@@ -1,4 +1,4 @@
-package nl.quad.opentrivia.service;
+package nl.quad.opentrivia.functionality.answerstore.service;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;

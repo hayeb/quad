@@ -1,4 +1,4 @@
-package nl.quad.opentrivia.client.opentrivia.model;
+package nl.quad.opentrivia.functionality.questions.model;
 
 public enum Difficulty {
     EASY,

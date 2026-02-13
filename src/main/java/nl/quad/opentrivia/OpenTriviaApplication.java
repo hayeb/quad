@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OpenTriviaApplication {
 
-	static void main(String[] args) {
-		SpringApplication.run(OpenTriviaApplication.class, args);
-	}
+    static void main(String[] args) {
+        SpringApplication.run(OpenTriviaApplication.class, args);
+    }
 
 }

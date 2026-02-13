@@ -5,15 +5,11 @@ function getQuestions() {
     const questionType = document.getElementById('questionType').value ?? "";
 
     fetch(`/api/questions?amount=${amount}&category=${category}&difficulty=${difficulty}&questionType=${questionType}`)
+        .then(response => response.json())
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+            if (response.message) {
+                throw new Error(response.message);
             }
-            return response.text();
-        })
-        .then(response => {
-            const questions = JSON.parse(response);
-
             if (!questions.length) {
                 throw new Error('No questions found, please change your selection.')
             }
@@ -23,9 +19,9 @@ function getQuestions() {
             for (const question of questions) {
                 const answers = `<option value="">Select answer...</option>` + question.answers.map(answer => `<option value="${answer}">${answer}</option>`).join('\n');
                 const row = newQuestionsTableBody.insertRow();
-                row.insertCell().innerHTML = question.value;
-                row.insertCell().innerHTML = `<select id="${question.value}">${answers}</select>`;
-                row.insertCell().id = `ANSWER-${question.value}`;
+                row.insertCell().innerHTML = question.question;
+                row.insertCell().innerHTML = `<select id="${question.question}">${answers}</select>`;
+                row.insertCell().id = `ANSWER-${question.question}`;
             }
 
             const questionsTableBody = document.getElementById('questionsTableBody');
@@ -56,17 +52,25 @@ function checkQuestions() {
         body: JSON.stringify(toCheck),
         headers: {'Content-Type': 'application/json'}
     })
+        .then(response =>  response.json())
+
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+            if (response.message) {
+                throw new Error(response.message);
             }
-            return response.text();
-        })
-        .then(response => {
-            for (let checked of JSON.parse(response)) {
-                document.getElementById(`ANSWER-${checked.question}`).textContent = checked.correct ? 'Correct!' : 'Incorrect :(';
-                document.getElementById(`ANSWER-${checked.question}`).classList.remove('correct', 'incorrect');
-                document.getElementById(`ANSWER-${checked.question}`).classList.add(checked.correct ? 'correct' : 'incorrect');
+            for (let checked of response) {
+                const element = document.getElementById(`ANSWER-${checked.question}`);
+                element.classList.remove('correct', 'incorrect', 'unknown');
+                if (checked.checkResult === 'CORRECT') {
+                    element.textContent = 'Correct!';
+                    element.classList.add('correct');
+                } else if (checked.checkResult === 'INCORRECT') {
+                    element.textContent = 'Incorrect!';
+                    element.classList.add('incorrect');
+                } else if (checked.checkResult === 'UNKNOWN') {
+                    element.textContent = 'Unknown question, please get a new list of questions!';
+                    element.classList.add('unknown');
+                }
             }
 
         })

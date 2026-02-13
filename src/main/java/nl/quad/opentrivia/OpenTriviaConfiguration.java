@@ -1,6 +1,6 @@
 package nl.quad.opentrivia;
 
-import nl.quad.opentrivia.service.AnswerStore;
+import nl.quad.opentrivia.functionality.answerstore.service.AnswerStore;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
