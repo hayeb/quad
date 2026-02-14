@@ -1,9 +1,33 @@
-<div class="content">
-    <app-questions-form (searchQuestions)="searchQuestions($event)" (checkAnswers)="checkAnswers()" />
+<header><h2>OpenTrivia App</h2></header>
 
-    @if (questions().length === 0) {
-        <span>Please use the form to search for questions</span>
-    } @else {
-        <app-questions-table [questions]="questions()"  [(answers)]="answers" [checks]="checks()" />
+<div class="content-container">
+  <div class="content">
+    <div class="form-container">
+      <app-questions-form (searchQuestions)="searchQuestions($event)" />
+    </div>
+
+    @let questionsState = questions();
+
+    @switch (questionsState.kind) {
+      @case ('IDLE') {
+        Please use the form to search for questions
+      }
+      @case ('LOADING') {
+        <div>
+          <mat-spinner [mode]="'indeterminate'" />
+          <span>Loading questions...</span>
+        </div>
+      }
+      @case ('SUCCESS') {
+        @let checksState = checks();
+        <app-questions-table
+          [questions]="questionsState.data"
+          (answered)="updateAnswer($event)"
+          [checks]="checksState.kind === 'SUCCESS' ? checksState.data : {}" />
+        <button mat-stroked-button (click)="checkAnswers()" [disabled]="Object.keys(answers()).length === 0">
+          Check answers
+        </button>
+      }
     }
+  </div>
 </div>

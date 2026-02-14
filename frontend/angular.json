@@ -48,10 +48,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets", "src/public"],
-            "styles": [
-              "src/material-theme.scss",
-              "src/styles.css"
-            ],
+            "styles": ["src/material-theme.scss", "src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -95,11 +92,18 @@
           "options": {
             "buildTarget": "first-app:build"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": ["angular-eslint"]
   }
 }

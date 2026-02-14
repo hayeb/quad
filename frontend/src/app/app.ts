@@ -1,43 +1,61 @@
-import {Component, signal} from '@angular/core';
-import {QuestionsForm, QuestionsFormOutput} from "./component/questions-form/questions-form";
-import {QuestionsTable} from "./component/questions-table/questions-table";
-import {Question} from "./interface/questions.interface";
-import {QuestionsService} from "./service/questions.service";
-import {CheckAnswersService} from "./service/check-answers.service";
-import {Answer, Check} from "./interface/check-answers.interface";
+import { Component, inject, signal } from '@angular/core';
+import { QuestionsForm, QuestionsFormOutput } from './component/questions-form/questions-form';
+import { QuestionsTable } from './component/questions-table/questions-table';
+import { Question } from './interface/questions.interface';
+import { QuestionsService } from './service/questions.service';
+import { CheckAnswersService } from './service/check-answers.service';
+import { Check } from './interface/check-answers.interface';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatButton } from '@angular/material/button';
+
+type ApiCallState<T> =
+  | { kind: 'IDLE' }
+  | { kind: 'LOADING' }
+  | { kind: 'SUCCESS'; data: T }
+  | { kind: 'ERROR'; error: string };
 
 @Component({
   selector: 'app-root',
-  imports: [
-    QuestionsForm,
-    QuestionsTable
-  ],
+  imports: [QuestionsForm, QuestionsTable, MatProgressSpinner, MatButton],
   templateUrl: `./app.html`,
   styleUrls: ['./app.css'],
 })
 export class App {
-  protected readonly questions = signal<Question[]>([]);
-  protected readonly answers  = signal<{question: string, answer: string | null}[]>([]);
-  protected readonly checks  = signal<Map<string, Check['checkResult']>>(new Map());
+  private readonly questionsService = inject(QuestionsService);
+  private readonly checkAnswerService = inject(CheckAnswersService);
 
-  constructor(private readonly questionsService: QuestionsService, private readonly checkAnswerService: CheckAnswersService) {}
+  protected readonly questions = signal<ApiCallState<Question[]>>({ kind: 'IDLE' });
+  protected readonly checks = signal<ApiCallState<Record<string, Check['checkResult']>>>({ kind: 'IDLE' });
+
+  protected answers = signal<Record<string, string | null>>({});
 
   protected searchQuestions($event: QuestionsFormOutput) {
-    this.questionsService.getQuestions($event.amount, $event.category, $event.difficulty, $event.questionType)
-        .subscribe(questions => {
-          this.questions.set(questions);
-          this.answers.set(this.questions().map(question => ({question: question.question, answer: null})));
-        })
+    this.questions.set({ kind: 'LOADING' });
+    this.questionsService
+      .getQuestions($event.amount, $event.category, $event.difficulty, $event.questionType)
+      .subscribe(questions => {
+        this.questions.set({ kind: 'SUCCESS', data: questions });
+        this.answers.set({});
+      });
   }
 
   protected checkAnswers() {
-    this.checkAnswerService.checkAnswers(this.answers().filter((answer): answer is Answer => !!answer.answer))
-        .subscribe(checks => {
-          const checkMap: Map<string, Check['checkResult']> = new Map();
-          for (let check of checks) {
-            checkMap.set(check.question, check.checkResult);
-          }
-          this.checks.set(checkMap)
-        })
+    this.checks.set({ kind: 'LOADING' });
+    const answered = Object.entries(this.answers())
+      .filter(answer => !!answer[1])
+      .map(answer => ({ question: answer[0], answer: answer[1] as string }));
+    this.checkAnswerService.checkAnswers(answered).subscribe(checks => {
+      const checkMap: Record<string, Check['checkResult']> = {};
+      for (const check of checks) {
+        checkMap[check.question] = check.checkResult;
+      }
+      this.checks.set({ kind: 'SUCCESS', data: checkMap });
+    });
   }
+
+  protected updateAnswer({ question, answer }: { question: string; answer: string | null }) {
+    this.answers.set({ ...this.answers(), [question]: answer });
+  }
+
+  protected readonly Object = Object;
 }

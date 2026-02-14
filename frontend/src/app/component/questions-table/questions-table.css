@@ -1,7 +1,23 @@
 :host {
-    width: 50%;
+  width: 100%;
 }
 
 .mat-column-question {
-    max-width: 300px;
+  max-width: 300px;
+}
+
+td.mat-column-correct {
+  text-align: center;
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}
+
+.unknown {
+  color: orange;
 }

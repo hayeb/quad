@@ -1,34 +1,40 @@
 <table mat-table [dataSource]="questions()" class="mat-elevation-z8">
+  <ng-container matColumnDef="question">
+    <th mat-header-cell *matHeaderCellDef>Question</th>
+    <td mat-cell *matCellDef="let element">{{ element.question }}</td>
+  </ng-container>
 
-    <ng-container matColumnDef="question">
-        <th mat-header-cell *matHeaderCellDef>Question</th>
-        <td mat-cell *matCellDef="let element"> {{ element.question }}</td>
-    </ng-container>
+  <ng-container matColumnDef="answer">
+    <th mat-header-cell *matHeaderCellDef>Answer</th>
+    <td *matCellDef="let element" mat-cell>
+      <mat-select [formControl]="formGroup.controls[element.question]">
+        @for (answer of element.answers; track answer) {
+          <mat-option [value]="answer">{{ answer }}</mat-option>
+        }
+      </mat-select>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="answer">
-        <th mat-header-cell *matHeaderCellDef>Answer</th>
-        <td *matCellDef="let element" mat-cell>
-            <mat-select (selectionChange)="updateAnswer(element, $event)">
-                @for (answer of element.answers; track answer) {
-                    <mat-option [value]="answer">{{ answer }}</mat-option>
-                }
-            </mat-select>
+  <ng-container matColumnDef="correct">
+    <th mat-header-cell *matHeaderCellDef>Correct?</th>
+    <td mat-cell *matCellDef="let element">
+      @if (checks()?.[element.question]) {
+        @let check = checks()?.[element.question];
+        @switch (check) {
+          @case ('CORRECT') {
+            <mat-icon class="correct">check_circle</mat-icon>
+          }
+          @case ('INCORRECT') {
+            <mat-icon class="incorrect">cancel</mat-icon>
+          }
+          @case ('UNKNOWN') {
+            <mat-icon class="UNKNOWN">error</mat-icon>
+          }
+        }
+      }
+    </td>
+  </ng-container>
 
-        </td>
-    </ng-container>
-
-    <ng-container matColumnDef="correct">
-        <th mat-header-cell *matHeaderCellDef> Correct?</th>
-        <td mat-cell *matCellDef="let element">
-            @if (checks().has(element.question)) {
-                {{checks().get(element.question)}}
-            }
-
-
-        </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef=" ['question', 'answer', 'correct']"></tr>
-    <tr mat-row *matRowDef="let _; columns: ['question', 'answer', 'correct'];"></tr>
+  <tr mat-header-row *matHeaderRowDef="['question', 'answer', 'correct']"></tr>
+  <tr mat-row *matRowDef="let _; columns: ['question', 'answer', 'correct']"></tr>
 </table>
-
