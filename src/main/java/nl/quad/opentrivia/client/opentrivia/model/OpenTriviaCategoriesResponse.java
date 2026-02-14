@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record CategoriesResponse(
+public record OpenTriviaCategoriesResponse(
     @JsonProperty("trivia_categories")
     List<OpenTriviaCategory> categories) {
 }

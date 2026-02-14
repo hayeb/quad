@@ -33,8 +33,8 @@ class OpenTriviaClientServiceTest {
         server.expect(requestTo("https://opentdb.com/api.php?amount=10&category=&difficulty=&type="))
             .andRespond(withSuccess(IOUtils.toString(questionsResponse, StandardCharsets.UTF_8), MediaType.APPLICATION_JSON));
 
-        QuestionsResponse questions = openTriviaClientService.getQuestions(10, null, null, null);
-        assertThat(questions).extracting(QuestionsResponse::responseCode).isEqualTo(0);
+        OpenTriviaQuestionsResponse questions = openTriviaClientService.getQuestions(10, null, null, null);
+        assertThat(questions).extracting(OpenTriviaQuestionsResponse::responseCode).isEqualTo(0);
         assertThat(questions.results()).containsExactly(
             new OpenTriviaQuestion(OpenTriviaQuestionType.MULTIPLE_CHOICE, OpenTriviaDifficulty.EASY, "General Knowledge", "What company developed the vocaloid Hatsune Miku?", "Crypton Future Media", List.of("Sega",
                 "Sony",
@@ -53,8 +53,8 @@ class OpenTriviaClientServiceTest {
                 .body(IOUtils.toString(questionsResponse, StandardCharsets.UTF_8))
                 .contentType(MediaType.APPLICATION_JSON));
 
-        QuestionsResponse questions = openTriviaClientService.getQuestions(10, null, null, null);
-        assertThat(questions).extracting(QuestionsResponse::responseCode).isEqualTo(1);
+        OpenTriviaQuestionsResponse questions = openTriviaClientService.getQuestions(10, null, null, null);
+        assertThat(questions).extracting(OpenTriviaQuestionsResponse::responseCode).isEqualTo(1);
     }
 
     @Test
@@ -65,7 +65,7 @@ class OpenTriviaClientServiceTest {
         server.expect(requestTo("https://opentdb.com/api_category.php"))
             .andRespond(withSuccess(IOUtils.toString(categoriesResponse, StandardCharsets.UTF_8), MediaType.APPLICATION_JSON));
 
-        CategoriesResponse categories = openTriviaClientService.getCategories();
+        OpenTriviaCategoriesResponse categories = openTriviaClientService.getCategories();
         assertThat(categories.categories()).containsExactly(
             new OpenTriviaCategory(9L, "General Knowledge"),
             new OpenTriviaCategory(10L, "Entertainment: Books"),

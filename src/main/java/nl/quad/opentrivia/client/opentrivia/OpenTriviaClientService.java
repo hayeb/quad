@@ -25,10 +25,10 @@ public class OpenTriviaClientService {
         this.restClient = builder.baseUrl(baseUrl).build();
     }
 
-    public QuestionsResponse getQuestions(int amount, Integer category, OpenTriviaDifficulty difficulty, OpenTriviaQuestionType questionType) {
+    public OpenTriviaQuestionsResponse getQuestions(int amount, Integer category, OpenTriviaDifficulty difficulty, OpenTriviaQuestionType questionType) {
         // https://opentdb.com/api.php?amount=10&category=21&difficulty=medium&type=multiple
         // For now, no support for session tokens
-        ResponseEntity<QuestionsResponse> response = restClient.get().uri("/api.php?amount={amount}&category={category}&difficulty={difficulty}&type={type}", Map.of(
+        ResponseEntity<OpenTriviaQuestionsResponse> response = restClient.get().uri("/api.php?amount={amount}&category={category}&difficulty={difficulty}&type={type}", Map.of(
                 "amount", amount,
                 "category", Optional.ofNullable(category).map(Object::toString).orElse(""),
                 "difficulty", Optional.ofNullable(difficulty).map(OpenTriviaDifficulty::getValue).orElse(""),
@@ -40,20 +40,20 @@ public class OpenTriviaClientService {
             // Ignore HTTP 400 error codes because OpenTDB still sends a valid QuestionsResponse with a usable error code.s
             .onStatus(HttpStatusCode::is4xxClientError, (req, r) -> {
             })
-            .toEntity(QuestionsResponse.class);
+            .toEntity(OpenTriviaQuestionsResponse.class);
 
-        QuestionsResponse questionsResponse = handleOpenTriviaResponse(response, "Questions API");
+        OpenTriviaQuestionsResponse questionsResponse = handleOpenTriviaResponse(response, "Questions API");
         List<OpenTriviaQuestion> decodedQuestions = Optional.of(questionsResponse)
-            .map(QuestionsResponse::results)
+            .map(OpenTriviaQuestionsResponse::results)
             .map(questions -> questions.stream()
                 .map(this::decodeQuestion)
                 .toList()).orElse(null);
-        return new QuestionsResponse(questionsResponse.responseCode(), decodedQuestions);
+        return new OpenTriviaQuestionsResponse(questionsResponse.responseCode(), decodedQuestions);
     }
 
-    public CategoriesResponse getCategories() {
+    public OpenTriviaCategoriesResponse getCategories() {
         return handleOpenTriviaResponse(
-            restClient.get().uri("/api_category.php").accept(APPLICATION_JSON).retrieve().toEntity(CategoriesResponse.class),
+            restClient.get().uri("/api_category.php").accept(APPLICATION_JSON).retrieve().toEntity(OpenTriviaCategoriesResponse.class),
             "Categories API");
     }
 

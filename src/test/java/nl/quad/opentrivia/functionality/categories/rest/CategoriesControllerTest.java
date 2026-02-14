@@ -1,7 +1,7 @@
 package nl.quad.opentrivia.functionality.categories.rest;
 
 import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
-import nl.quad.opentrivia.client.opentrivia.model.CategoriesResponse;
+import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaCategoriesResponse;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaCategory;
 import nl.quad.opentrivia.functionality.categories.rest.dto.CategoryDto;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class CategoriesControllerTest {
     @Test
     public void getCategoriesTest() {
         Mockito.when(openTriviaClientService.getCategories())
-            .thenReturn(new CategoriesResponse(List.of(
+            .thenReturn(new OpenTriviaCategoriesResponse(List.of(
                 new OpenTriviaCategory(4L, "Cat 4"),
                 new OpenTriviaCategory(3L, "Cat 3"),
                 new OpenTriviaCategory(2L, "Cat 2"),

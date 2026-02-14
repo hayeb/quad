@@ -4,7 +4,7 @@ import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaDifficulty;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestion;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionType;
-import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionsResponse;
 import nl.quad.opentrivia.functionality.answerstore.service.AnswerStore;
 import nl.quad.opentrivia.functionality.questions.model.Difficulty;
 import nl.quad.opentrivia.functionality.questions.model.Question;
@@ -39,7 +39,7 @@ class QuestionsServiceTest {
     @Test
     void testQuestions() {
         Mockito.when(openTriviaClientService.getQuestions(anyInt(), anyInt(), any(), any()))
-            .thenReturn(new QuestionsResponse(0, List.of(
+            .thenReturn(new OpenTriviaQuestionsResponse(0, List.of(
                 new OpenTriviaQuestion(OpenTriviaQuestionType.MULTIPLE_CHOICE, OpenTriviaDifficulty.EASY, "Sports", "Who won the 2016 Formula 1 World Driver's Championship?", "Nico Rosberg", List.of("Lewis Hamilton", "Max Verstappen", "Kimi Raikkonen")))));
 
         List<Question> questions = questionsService.findQuestions(20, 21, Difficulty.EASY, QuestionType.MULTIPLE_CHOICE);

@@ -4,7 +4,7 @@ import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaDifficulty;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestion;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionType;
-import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionsResponse;
 import nl.quad.opentrivia.functionality.questions.rest.dto.QuestionDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,6 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTe
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
@@ -41,7 +40,7 @@ class QuestionsControllerTest {
     @Test
     public void getQuestionsTest() {
         Mockito.when(openTriviaClientService.getQuestions(10, 1, OpenTriviaDifficulty.MEDIUM, OpenTriviaQuestionType.BOOLEAN))
-            .thenReturn(new QuestionsResponse(0, List.of(
+            .thenReturn(new OpenTriviaQuestionsResponse(0, List.of(
                 new OpenTriviaQuestion(OpenTriviaQuestionType.BOOLEAN, OpenTriviaDifficulty.MEDIUM, "Cat 1", "Q1", "True", List.of("False")),
                 new OpenTriviaQuestion(OpenTriviaQuestionType.BOOLEAN, OpenTriviaDifficulty.MEDIUM, "Cat 1", "Q2", "False", List.of("True")),
                 new OpenTriviaQuestion(OpenTriviaQuestionType.BOOLEAN, OpenTriviaDifficulty.MEDIUM, "Cat 1", "Q3", "False", List.of("True")),
@@ -77,7 +76,7 @@ class QuestionsControllerTest {
     @Test
     public void getQuestionsInvalidCategory() {
         Mockito.when(openTriviaClientService.getQuestions(anyInt(), eq(999), any(), any()))
-            .thenReturn(new QuestionsResponse(2, null));
+            .thenReturn(new OpenTriviaQuestionsResponse(2, null));
         restTestClient
             .get()
             .uri("http://localhost:%d/api/questions?category=999".formatted(port))

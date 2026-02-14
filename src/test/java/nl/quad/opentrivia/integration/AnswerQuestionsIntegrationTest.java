@@ -4,7 +4,7 @@ import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaDifficulty;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestion;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionType;
-import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionsResponse;
 import nl.quad.opentrivia.functionality.answerstore.service.AnswerStore;
 import nl.quad.opentrivia.functionality.checkanswers.rest.dto.AnswerDto;
 import nl.quad.opentrivia.functionality.checkanswers.rest.dto.CheckDto;
@@ -18,9 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.bean.override.convention.TestBean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
@@ -61,7 +59,7 @@ public class AnswerQuestionsIntegrationTest {
     @Test
     public void getQuestionsTest() {
         Mockito.when(openTriviaClientService.getQuestions(10, 1, OpenTriviaDifficulty.MEDIUM, OpenTriviaQuestionType.BOOLEAN))
-            .thenReturn(new QuestionsResponse(0, List.of(
+            .thenReturn(new OpenTriviaQuestionsResponse(0, List.of(
                 new OpenTriviaQuestion(OpenTriviaQuestionType.BOOLEAN, OpenTriviaDifficulty.MEDIUM, "Cat 1", "Q1", "True", List.of("False")),
                 new OpenTriviaQuestion(OpenTriviaQuestionType.BOOLEAN, OpenTriviaDifficulty.MEDIUM, "Cat 1", "Q2", "False", List.of("True")),
                 new OpenTriviaQuestion(OpenTriviaQuestionType.BOOLEAN, OpenTriviaDifficulty.MEDIUM, "Cat 1", "Q3", "False", List.of("True")),

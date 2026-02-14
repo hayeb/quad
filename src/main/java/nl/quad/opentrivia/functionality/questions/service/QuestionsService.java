@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
-import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionsResponse;
 import nl.quad.opentrivia.exception.OpenTriviaException;
 import nl.quad.opentrivia.functionality.answerstore.service.AnswerStore;
 import nl.quad.opentrivia.functionality.questions.mapper.QuestionsMapper;
@@ -38,7 +38,7 @@ public class QuestionsService {
         Difficulty difficulty,
         QuestionType questionType) {
 
-        QuestionsResponse response = openTriviaClientService.getQuestions(
+        OpenTriviaQuestionsResponse response = openTriviaClientService.getQuestions(
             amount,
             category,
             questionsMapper.toOpenTriviaDifficulty(difficulty),
