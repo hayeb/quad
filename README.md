@@ -21,7 +21,7 @@ answers.
    ```
 
 ## Building and running frontend 
-1. Install [NVM](https://github.com/nvm-sh/nvm)
+1. Install [Node Version Manager](https://github.com/nvm-sh/nvm)
 2. Install node 24:
    ```shell
    nvm install 24
@@ -54,6 +54,4 @@ answers.
 ## Possible improvements
 * Use OpenTrivia session tokens in some way to prevent duplicate questions
 * Store answers in a persistent database
-* Dynamically download categories from OpenTrivia and display in category selection input
-  * Also display category question counts?
 * Add OpenAPI endpoint/schema
