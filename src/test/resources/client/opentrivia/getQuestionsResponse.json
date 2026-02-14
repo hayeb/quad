@@ -1,0 +1,27 @@
+{
+  "response_code": 0,
+  "results": [
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "General Knowledge",
+      "question": "What company developed the vocaloid Hatsune Miku?",
+      "correct_answer": "Crypton Future Media",
+      "incorrect_answers": [
+        "Sega",
+        "Sony",
+        "Yamaha Corporation"
+      ]
+    },
+    {
+      "type": "boolean",
+      "difficulty": "medium",
+      "category": "Politics",
+      "question": "The 2016 United States Presidential Election is the first time Hillary Clinton has run for President.",
+      "correct_answer": "False",
+      "incorrect_answers": [
+        "True"
+      ]
+    }
+  ]
+}

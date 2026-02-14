@@ -1,4 +1,6 @@
 package nl.quad.opentrivia.functionality.checkanswers.rest.dto;
 
-public record AnswerDto(String question, String answer) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record AnswerDto(@NotEmpty String question, @NotEmpty String answer) {
 }
