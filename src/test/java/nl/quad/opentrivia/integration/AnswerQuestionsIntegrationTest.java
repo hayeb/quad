@@ -5,21 +5,28 @@ import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaDifficulty;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestion;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionType;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import nl.quad.opentrivia.functionality.answerstore.service.AnswerStore;
 import nl.quad.opentrivia.functionality.checkanswers.rest.dto.AnswerDto;
 import nl.quad.opentrivia.functionality.checkanswers.rest.dto.CheckDto;
 import nl.quad.opentrivia.functionality.checkanswers.rest.dto.CheckResultDto;
 import nl.quad.opentrivia.functionality.questions.rest.dto.QuestionDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.bean.override.convention.TestBean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
+import tools.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +36,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class AnswerQuestionsIntegrationTest {
 
+    @TempDir
+    private static File tempDir;
+
     @LocalServerPort
     private int port;
 
@@ -37,6 +47,13 @@ public class AnswerQuestionsIntegrationTest {
 
     @MockitoBean
     private OpenTriviaClientService openTriviaClientService;
+
+    @TestBean
+    private AnswerStore answerStore;
+
+    static AnswerStore answerStore() {
+        return new AnswerStore(new ObjectMapper(), tempDir.toPath().resolve("answers-test.json").toString());
+    }
 
     /**
      * Questions may be retrieved via the /questions API anD answers checked via the /checkanswers API.
