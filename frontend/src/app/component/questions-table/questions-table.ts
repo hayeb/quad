@@ -16,7 +16,6 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { Check } from '../../interface/check-answers.interface';
 import { MatIcon } from '@angular/material/icon';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
