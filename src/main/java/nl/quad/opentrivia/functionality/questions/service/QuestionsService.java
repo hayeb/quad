@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
-import nl.quad.opentrivia.client.opentrivia.mapper.OpenTriviaClientMapper;
 import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
 import nl.quad.opentrivia.exception.OpenTriviaException;
 import nl.quad.opentrivia.functionality.answerstore.service.AnswerStore;
+import nl.quad.opentrivia.functionality.questions.mapper.QuestionsMapper;
 import nl.quad.opentrivia.functionality.questions.model.Difficulty;
 import nl.quad.opentrivia.functionality.questions.model.Question;
 import nl.quad.opentrivia.functionality.questions.model.QuestionType;
@@ -22,7 +22,7 @@ public class QuestionsService {
 
     private final OpenTriviaClientService openTriviaClientService;
     private final AnswerStore answerStore;
-    private final OpenTriviaClientMapper openTriviaClientMapper;
+    private final QuestionsMapper questionsMapper;
 
     /**
      * Retrieves questions from the OpenTDB API and stores the correct answer for future checking using the {@link AnswerStore}
@@ -41,15 +41,15 @@ public class QuestionsService {
         QuestionsResponse response = openTriviaClientService.getQuestions(
             amount,
             category,
-            openTriviaClientMapper.toOpenTriviaDifficulty(difficulty),
-            openTriviaClientMapper.toOpenTriviaQuestionType(questionType));
+            questionsMapper.toOpenTriviaDifficulty(difficulty),
+            questionsMapper.toOpenTriviaQuestionType(questionType));
 
         if (response.responseCode() != 0) {
             throw new OpenTriviaException("Open Trivia returned response code %d: %s".formatted(response.responseCode(), openTriviaResponseText(response.responseCode())));
         }
 
         return response.results().stream()
-            .map(openTriviaClientMapper::toQuestion)
+            .map(questionsMapper::toQuestion)
             .peek(question -> answerStore.storeAnswer(question.question(), question.correctAnswer()))
             .toList();
     }

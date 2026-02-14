@@ -1,9 +1,10 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { Difficulty, QuestionType } from '../../interface/questions.interface';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { Category } from '../../interface/category.interface';
 
 export interface QuestionsFormOutput {
   amount: number;
@@ -19,6 +20,8 @@ export interface QuestionsFormOutput {
   styleUrls: ['./questions-form.css'],
 })
 export class QuestionsForm {
+  categories = input.required<Category[]>();
+
   searchQuestions = output<QuestionsFormOutput>();
 
   protected readonly formGroup = new FormGroup({

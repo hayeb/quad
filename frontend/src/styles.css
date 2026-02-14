@@ -21,3 +21,9 @@ button.primary {
   color: white;
   border-radius: 8px;
 }
+
+app-questions-form {
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}

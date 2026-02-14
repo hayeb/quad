@@ -1,7 +1,6 @@
 package nl.quad.opentrivia.functionality.questions.service;
 
 import nl.quad.opentrivia.client.opentrivia.OpenTriviaClientService;
-import nl.quad.opentrivia.client.opentrivia.mapper.OpenTriviaClientMapper;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaDifficulty;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestion;
 import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionType;
@@ -12,8 +11,6 @@ import nl.quad.opentrivia.functionality.questions.model.Question;
 import nl.quad.opentrivia.functionality.questions.model.QuestionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-import { Component, effect, input, output } from '@angular/core';
+import { Component, computed, effect, input, output } from '@angular/core';
 import { Question } from 'src/app/interface/questions.interface';
 import {
   MatCell,
@@ -17,6 +17,7 @@ import { Check } from '../../interface/check-answers.interface';
 import { MatIcon } from '@angular/material/icon';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-questions-table',
@@ -35,17 +36,26 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatHeaderRowDef,
     MatIcon,
     ReactiveFormsModule,
+    MatTooltip,
   ],
   templateUrl: './questions-table.html',
   styleUrls: ['./questions-table.css'],
 })
 export class QuestionsTable {
   questions = input.required<Question[]>();
-  checks = input<Record<string, Check['checkResult']>>();
+  checks = input.required<Check[]>();
 
   answered = output<{ question: string; answer: string | null }>();
 
   protected formGroup = new FormGroup<Record<string, FormControl<string | null>>>({});
+
+  checkResult = computed(() => {
+    const results: Record<string, Check['checkResult']> = {};
+    for (const check of this.checks()) {
+      results[check.question] = check.checkResult;
+    }
+    return results;
+  });
 
   constructor() {
     effect(() => {

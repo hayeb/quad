@@ -1,13 +1,29 @@
 :host {
   width: 100%;
 }
-
+table {
+  table-layout: fixed;
+}
 .mat-column-question {
+  min-width: 300px;
   max-width: 300px;
 }
 
-td.mat-column-correct {
-  text-align: center;
+.mat-column-answer {
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.mat-column-correct {
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.check-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 }
 
 .correct {

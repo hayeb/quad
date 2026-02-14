@@ -1,13 +1,11 @@
 package nl.quad.opentrivia.client.opentrivia;
 
 import nl.quad.opentrivia.client.opentrivia.exception.OpenTriviaClientException;
-import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaDifficulty;
-import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestion;
-import nl.quad.opentrivia.client.opentrivia.model.OpenTriviaQuestionType;
-import nl.quad.opentrivia.client.opentrivia.model.QuestionsResponse;
+import nl.quad.opentrivia.client.opentrivia.model.*;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -38,18 +36,25 @@ public class OpenTriviaClientService {
             ))
             .accept(APPLICATION_JSON)
             .retrieve()
+
+            // Ignore HTTP 400 error codes because OpenTDB still sends a valid QuestionsResponse with a usable error code.s
+            .onStatus(HttpStatusCode::is4xxClientError, (req, r) -> {
+            })
             .toEntity(QuestionsResponse.class);
 
-        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-            List<OpenTriviaQuestion> decodedQuestions = response.getBody().results().stream()
+        QuestionsResponse questionsResponse = handleOpenTriviaResponse(response, "Questions API");
+        List<OpenTriviaQuestion> decodedQuestions = Optional.of(questionsResponse)
+            .map(QuestionsResponse::results)
+            .map(questions -> questions.stream()
                 .map(this::decodeQuestion)
-                .toList();
-            return new QuestionsResponse(response.getBody().responseCode(), decodedQuestions);
-        } else if (response.getStatusCode() != HttpStatus.OK) {
-            throw new OpenTriviaClientException("API returned response code: %d".formatted(response.getStatusCode().value()));
-        } else {
-            throw new OpenTriviaClientException("API returned response code 0 but response body was null");
-        }
+                .toList()).orElse(null);
+        return new QuestionsResponse(questionsResponse.responseCode(), decodedQuestions);
+    }
+
+    public CategoriesResponse getCategories() {
+        return handleOpenTriviaResponse(
+            restClient.get().uri("/api_category.php").accept(APPLICATION_JSON).retrieve().toEntity(CategoriesResponse.class),
+            "Categories API");
     }
 
     private OpenTriviaQuestion decodeQuestion(OpenTriviaQuestion openTriviaQuestion) {
@@ -58,5 +63,15 @@ public class OpenTriviaClientService {
             .correctAnswer(StringEscapeUtils.unescapeHtml4(openTriviaQuestion.correctAnswer()))
             .incorrectAnswers(openTriviaQuestion.incorrectAnswers().stream().map(StringEscapeUtils::unescapeHtml4).toList())
             .build();
+    }
+
+    private <T> T handleOpenTriviaResponse(ResponseEntity<T> response, String api) {
+        if (response.getBody() != null) {
+            return response.getBody();
+        } else if (response.getStatusCode() != HttpStatus.OK) {
+            throw new OpenTriviaClientException("%s returned response code: %d".formatted(api, response.getStatusCode().value()));
+        } else {
+            throw new OpenTriviaClientException("%s returned response code 200 OK but response body was null".formatted(api));
+        }
     }
 }

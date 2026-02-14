@@ -26,10 +26,6 @@ answers.
    ```shell
    nvm install 24
    ````
-3. Install the Angular CLI
-   ```shell
-   npm install -g @angular/cli
-   ```
 4. Go into frontend and install dependencies
    ```shell
    cd frontend
@@ -37,7 +33,8 @@ answers.
    ```
 5. Start the Angular dev server
    ```shell
-   ng serve
+   cd frontend
+   npx ng serve
    ```
 
 ## Testing
@@ -53,10 +50,8 @@ answers.
    store so they may be checked later
     1. This store is currently a file with JSON contents (PoC, MVP). Should be replaced with proper persistence (Redis,
        SQLite, ...). An attempt is made to allow multithreading, but no hard guarantees are given
-3. Frontend it a simple static HTML page.
 
 ## Possible improvements
-* Handle OpenTrivia rate limiting
 * Use OpenTrivia session tokens in some way to prevent duplicate questions
 * Store answers in a persistent database
 * Dynamically download categories from OpenTrivia and display in category selection input

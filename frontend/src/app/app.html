@@ -3,31 +3,61 @@
 <div class="content-container">
   <div class="content">
     <div class="form-container">
-      <app-questions-form (searchQuestions)="searchQuestions($event)" />
+      @let categoriesState = categories();
+      @switch (categoriesState.kind) {
+        @case (ApiState.LOADING) {
+          <div class="loading-container">
+            <mat-spinner [mode]="'indeterminate'" />
+            <span>Loading...</span>
+          </div>
+        }
+        @case (ApiState.ERROR) {
+          <div class="error-container">
+            <span>There was an error retrieving question categories: {{ categoriesState.error }}</span>
+          </div>
+        }
+        @case (ApiState.SUCCESS) {
+          <app-questions-form [categories]="categoriesState.data" (searchQuestions)="searchQuestions($event)" />
+        }
+      }
     </div>
 
     @let questionsState = questions();
-
-    @switch (questionsState.kind) {
-      @case ('IDLE') {
-        Please use the form to search for questions
+    <div class="questions-container">
+      @switch (questionsState.kind) {
+        @case (ApiState.IDLE) {
+          Please use the form to search for questions
+        }
+        @case (ApiState.LOADING) {
+          <div class="loading-container">
+            <mat-spinner [mode]="'indeterminate'" />
+            <span>Retrieving questions...</span>
+          </div>
+        }
+        @case (ApiState.ERROR) {
+          <div class="error-container">
+            <span>There was an error retrieving questions: {{ questionsState.error }}</span>
+          </div>
+        }
+        @case (ApiState.SUCCESS) {
+          @let checksState = checks();
+          @if (checksState.kind === ApiState.LOADING) {
+            <mat-progress-bar [mode]="'indeterminate'" />
+          }
+          @if (checksState.kind === ApiState.ERROR) {
+            There was an error checking your answers: {{ checksState.error }}
+          }
+          <app-questions-table
+            [questions]="questionsState.data"
+            (answered)="updateAnswer($event)"
+            [checks]="checksState.kind === ApiState.SUCCESS ? checksState.data : []" />
+          <div class="buttons-container">
+            <button mat-stroked-button (click)="checkAnswers()" [disabled]="Object.keys(answers()).length === 0">
+              Check answers
+            </button>
+          </div>
+        }
       }
-      @case ('LOADING') {
-        <div>
-          <mat-spinner [mode]="'indeterminate'" />
-          <span>Loading questions...</span>
-        </div>
-      }
-      @case ('SUCCESS') {
-        @let checksState = checks();
-        <app-questions-table
-          [questions]="questionsState.data"
-          (answered)="updateAnswer($event)"
-          [checks]="checksState.kind === 'SUCCESS' ? checksState.data : {}" />
-        <button mat-stroked-button (click)="checkAnswers()" [disabled]="Object.keys(answers()).length === 0">
-          Check answers
-        </button>
-      }
-    }
+    </div>
   </div>
 </div>
